@@ -1,0 +1,64 @@
+/*con esta hoja de estilos, se pretende resetear todos los estilos por defecto
+que pueden venir de los distintos navegadores. La pongo encima de mi hoja styles.css*/
+
+* {
+  margin: 0;
+  padding: 0; /*esto se hace para empezar de una base neutra o normalizar el css para todos los navegadores y empezar de 0*/
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth; /*esto es por si hay un movimiento con anclas, que sea suavizado*/
+}
+
+body {
+  min-height: 100vh; /*esto quiere decir que ocupe el 100% de la altura vertical de la página */
+  scroll-behavior: smooth; /*esto es por si hay un movimiento con anclas, que sea suavizado*/
+  text-rendering: optimizeSpeed; /*para que renderice las fuentes de manera rápida*/
+  line-height: 1.5;
+}
+
+ul,
+ol {
+  list-style: none; /*para que no tengan estilos*/
+}
+
+a {
+  display: block;
+  text-decoration: none;
+  font-size: inherit;
+  display: block;
+  color: inherit;
+}
+
+p a {
+  display: inline; /*le aplico un display inline a los enlaces que haya dentro de los párrafos para que no se produzcan saltos de línea dentro de los párrafos*/
+}
+
+img,
+video,
+iframe,
+picture,
+figure {
+  max-width: 100%;
+  display: block;
+}
+
+form,
+input,
+select,
+textarea,
+button,
+label {
+  font-family: inherit; /*quiere decir heredado del padre*/
+  font-size: inherit;
+  display: block;
+  color: inherit;
+}

@@ -1,0 +1,1310 @@
+/* VARIABLES */
+:root {
+  --mx-width: 1320px;
+  --color-text-body: #525260;
+  --color-primary: #19649b;
+  --color-secondary: #d3e6bf;
+  --color-terciary: #fff;
+  --color-cuater: #ecba97;
+  --color-navbar: #27546c;
+  --color-bg-projects: #ecf2f6;
+  --color_bg-dark: #27272e;
+  --color-description: #99a1aa;
+  --color-borders: #e3e6e9;
+}
+
+/* ESTILOS GENERALES */
+
+html {
+  font-size: 10px;
+  overflow-x: hidden; /*esto significa que todo lo que sobresalga en el eje x estará oculto*/
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  font-size: 1.6rem;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  color: var(--color-text-body);
+}
+
+/*ESTRUCTURA*/
+
+.layout {
+  width: 100%;
+}
+
+.menu__banner {
+  background-image: url(../img/banner8.jpeg);
+  background-position: center;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+/*ESTILOS MENU NAVEGACION*/
+.layout__menu {
+  width: 97%;
+  padding: 3.5rem 3rem;
+  margin-bottom: 5rem;
+  margin-left: 3rem;
+  margin-right: 3rem;
+  border-radius: 4rem;
+}
+
+.menu__navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center; /*con esto conseguimos el centrado vertical de los elementos*/
+}
+
+.menu__navbar--fixed {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 9;
+  background-color: var(--color-terciary);
+  padding: 1.5rem 8rem;
+}
+
+.navbar__logo {
+  width: 187px; /*aquí no pongo rem porque es una medida fija. El logo siempre va a medir eso, sea responsive o no, por eso uso px*/
+}
+
+.navbar__logo-light {
+  border-radius: 10rem;
+  opacity: 0.6;
+  transition: all 500ms ease-in-out;
+}
+
+.navbar__logo-light:hover {
+  opacity: 1;
+}
+
+.navbar__nav {
+  margin-right: 5rem;
+}
+
+.nav__list {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 3.5rem;
+  font-size: 2rem;
+  color: #d19272;
+}
+
+.nav__item {
+  position: relative; /*Para luego poder agregar elementos con after o before*/
+  margin-right: 3rem;
+}
+
+.nav__submenu {
+  display: none; /*Por el momento, los elementos del submenú, aparecerán ocultos, de ahí el display none*/
+}
+
+.nav__title {
+  position: relative;
+  display: inline-block;
+  transition: all 500ms ease-in-out;
+}
+
+.nav__title:hover {
+  font-weight: bold;
+}
+
+.nav__title::before {
+  /*Esto será un efecto en el que cuando haga hover, saldrá una línea. Por eso con el pseudoelemento befores la oculto.
+    Si te fijas, el contenido está vacío porque realmente va a ser una barra y no llevará contenido como tal.
+    Le pongo position absolute para poder posicionarla y una opacity y un width del 0 para que inicialmente no se vea.
+    En la siguiente línea verás el hover y ahí se completará el efecto que estoy buscando*/
+  content: "";
+  height: 0.2rem;
+  width: 0;
+  background-color: var(--color-primary);
+  position: absolute;
+  bottom: -0.7rem;
+  left: 0;
+  opacity: 0;
+  transition: 500ms;
+}
+
+.nav__title:hover::before {
+  /*siguiendo con la explicación anterior, ahora cuando aplicas hover al nav__title, al pseudoelemento before le das una anchura del 100%
+    y una opacity de 1 para que se vea*/
+  width: 100%;
+  opacity: 1;
+}
+
+.nav__icon {
+  font-size: 1rem;
+  font-weight: bold;
+  padding-left: 0.2rem;
+  vertical-align: middle;
+}
+
+.nav__submenu {
+  display: block; /*para que se vea*/
+  position: absolute; /*para poder moverlo dentro de la barra de navegacion*/
+  top: 4.3rem; /*Para que esté un poco más abajo y no se me solape con los textos del menu y me permita ver bien las lineas al hacer hover en nav__title*/
+  left: 2rem; /*Para que se desplacen un poco a la izquierda de forma inicial*/
+  min-width: 19rem;
+  padding: 1.5rem 1rem;
+  border-radius: 0.4rem;
+  background-color: #eeeeee;
+  box-shadow: 0px 13px 48px 0 rgba(0, 0, 0, 15%); /*el 13px significa que el desplazamiento en el eje y del box shadow será de 13px, y uso px porque será siempre fijo, 
+  aunque hagamos luego responsive*/
+  opacity: 0;
+  visibility: hidden; /*al igual que con la opacidad, busco que inicialmente no se vean*/
+  transition: all 500ms ease-in-out;
+}
+
+.nav__item:hover > .nav__submenu {
+  /*con esto me refiero al hijo directo submenu de nav__list*/
+  opacity: 1;
+  visibility: visible; /*en el nav__submenu le puse hidden y ahora le pongo visible para que al hacer hover, aparezca*/
+  z-index: 999; /*esto lo hago para que se posicione por arriba de todas las cosas, por si se diera el caso.*/
+  left: 0; /*Para que no se desplace. Si te fijas, inicialmente está desplazado, y lo hicimos así a propósito para que ahora cuando haga hover, vuelva a su posicion inicial debajo del menu,
+    y se desplace el menú*/
+}
+
+.submenu__item {
+  opacity: 0; /*Por defecto lo pondré que no se vea para que en .nav__item:hover>.submenu__item ponerlo a 1 e ir viéndolos uno a uno de forma escalonada*/
+  transform: translateX(
+    2rem
+  ); /*esto es para desplazarlo ligeramente en el eje x*/
+  transition: all 100ms ease-in-out;
+}
+
+.submenu__item:nth-child(1) {
+  /*con esta pseudoclase lo que hago es seleccionar cada elemento hijo del submenu item*/
+  transition-delay: 100ms; /*lo que buscamos, ya que estos elementos tienen ya una transición es que vayan apareciendo de manera escalonada, aplicándoles un delay.
+    Y para ello, lo voy a aplicar a todos los elementos, no solo al 1, sino al 2, 3, 4, 5, 6...
+    Y lo vas a ver a continuación*/
+}
+
+.submenu__item:nth-child(2) {
+  /*con esta pseudoclase lo que hago es seleccionar cada elemento hijo del submenu item*/
+  transition-delay: 200ms; /*lo que buscamos, ya que estos elementos tienen ya una transición es que vayan apareciendo de manera escalonada, aplicándoles un delay.
+    Y para ello, lo voy a aplicar a todos los elementos, no solo al 1, sino al 2, 3, 4, 5, 6...*/
+}
+
+.submenu__item:nth-child(3) {
+  /*con esta pseudoclase lo que hago es seleccionar cada elemento hijo del submenu item*/
+  transition-delay: 300ms; /*lo que buscamos, ya que estos elementos tienen ya una transición es que vayan apareciendo de manera escalonada, aplicándoles un delay.
+    Y para ello, lo voy a aplicar a todos los elementos, no solo al 1, sino al 2, 3, 4, 5, 6...*/
+}
+
+.submenu__item:nth-child(4) {
+  /*con esta pseudoclase lo que hago es seleccionar cada elemento hijo del submenu item*/
+  transition-delay: 400ms; /*lo que buscamos, ya que estos elementos tienen ya una transición es que vayan apareciendo de manera escalonada, aplicándoles un delay.
+    Y para ello, lo voy a aplicar a todos los elementos, no solo al 1, sino al 2, 3, 4, 5, 6...*/
+}
+
+.submenu__item:nth-child(5) {
+  /*con esta pseudoclase lo que hago es seleccionar cada elemento hijo del submenu item*/
+  transition-delay: 500ms; /*lo que buscamos, ya que estos elementos tienen ya una transición es que vayan apareciendo de manera escalonada, aplicándoles un delay.
+    Y para ello, lo voy a aplicar a todos los elementos, no solo al 1, sino al 2, 3, 4, 5, 6...*/
+}
+
+.submenu__item:nth-child(6) {
+  /*con esta pseudoclase lo que hago es seleccionar cada elemento hijo del submenu item*/
+  transition-delay: 600ms; /*lo que buscamos, ya que estos elementos tienen ya una transición es que vayan apareciendo de manera escalonada, aplicándoles un delay.
+    Y para ello, lo voy a aplicar a todos los elementos, no solo al 1, sino al 2, 3, 4, 5, 6...*/
+}
+
+.submenu__title:hover {
+  color: var(--color-primary);
+}
+
+.submenu__title {
+  display: block;
+  position: relative;
+  font-size: 1.5rem;
+  text-transform: capitalize;
+  text-decoration: none;
+  font-weight: 500;
+  color: #706e7a;
+  padding: 0.7rem 1.5rem;
+  transition: all 300ms ease-in-out;
+}
+
+.nav__item:hover .submenu__item {
+  opacity: 1;
+  transform: translateX(
+    0
+  ); /*si te fijas, en .submenu__item los movimos con 2 rem, y ahora los volvemos a poner en su sitio*/
+}
+
+/*BANNER*/
+
+.layout__banner {
+  position: relative; /*Porque dentro colocaré elementos con posiciones absolutas. No es seguro, pero bueno, sabemos que para colocar elementos
+    con posiciones absolutas, el contenedor tiene que tener posición relativa*/
+  min-height: 60rem;
+  margin: 0 3rem; /*márgenes a los lados solamente.*/
+  padding: 10rem 0 20rem 10rem;
+  border-radius: 6rem;
+  overflow: hidden; /*para que todo lo que sobresalga se oculte*/
+  z-index: 1;
+}
+
+.banner__content {
+  position: relative; /*si no le pongo esto, el zindex no vale para nada*/
+  display: inline-block;
+  width: 50%;
+  z-index: 3;
+}
+.banner__title {
+  font-size: 8rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--color-terciary);
+  margin-bottom: 3rem;
+}
+
+.banner__btn {
+  display: inline-block;
+  background-color: #d19272;
+  color: var(--color-primary);
+  padding: 1.7rem;
+  width: 20rem;
+  height: 6rem;
+  text-align: center;
+  border-radius: 20px; /*valor fijo*/
+  font-weight: 500;
+  font-size: 1.8rem;
+  transition: all 1000ms ease-in-out;
+}
+
+.banner__btn:hover {
+  background-color: #6cc7d9;
+  color: #9c6156;
+}
+
+.shapes__item {
+  position: absolute;
+  width: 50rem;
+  z-index: 2;
+  pointer-events: none; /*esto es para no poder darle clic a esas imágenes*/
+}
+
+.shapes__item--shape1 {
+  text-align: right;
+  top: 0;
+  right: 0;
+  opacity: 0.5;
+  animation: showRight 8000ms;
+}
+
+@keyframes showRight {
+  /*tengo disponible 1 segundo, que es el tiempo que he definido para la animacion. En el segundo 0 le pongo unas reglas, al 0% y al segundo, es
+  decir, al 100% le pongo otras*/
+  0% {
+    transform: translateX(50%); /*con esto consigues que se esconda al pcpio*/
+  }
+  100% {
+    transform: translateX(-268%);
+  }
+}
+
+.shapes__item--shape2 {
+  bottom: 0;
+  left: 0;
+  opacity: 0.5;
+  animation: showLeft 8000ms;
+}
+
+@keyframes showLeft {
+  /*tengo disponible 1 segundo, que es el tiempo que he definido para la animacion. En el segundo 0 le pongo unas reglas, al 0% y al segundo, es
+  decir, al 100% le pongo otras*/
+  0% {
+    transform: translateX(-50%); /*con esto consigues que se esconda al pcpio*/
+  }
+  100% {
+    transform: translateX(268%);
+  }
+}
+
+.shapes__item--shape3 {
+  top: 28%;
+  left: 38%;
+  opacity: 0.5;
+}
+
+/*estilos seccion servicios*/
+
+.layout__services {
+  margin: 5rem 4rem;
+  position: relative; /*por si luego tenemos que poner algun position absolute*/
+  z-index: 1; /*por si luego necesitamos posicional algun elemento detrás o delante*/
+}
+
+.services__grid {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.services__header {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.services__subtitle {
+  color: var(--color-cuater);
+  font-size: 2rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.services__title {
+  color: var(--color-text-body);
+  font-size: 6.5rem;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.services__list {
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+}
+
+.services__service {
+  width: 33%;
+  height: 30rem;
+  padding: 5rem 4rem;
+  border-radius: 3rem;
+  margin-bottom: 4rem;
+  background: linear-gradient(180deg, #f8f8f8, rgba(255, 255, 255, 0));
+  background-color: #d5a690;
+  border: 0.1rem solid;
+  border-image-source: linear-gradient(90deg, #f8f8f8, rgba(255, 255, 255, 0));
+  transition: all 1000ms ease-in-out;
+  display: flex;
+  flex-direction: row;
+}
+
+.services__service:hover {
+  background-color: #2c9bb7;
+}
+
+.service__container-img {
+  margin-right: 2.5rem;
+}
+
+.service__img {
+  width: 25rem;
+  height: 10rem;
+  border-radius: 999rem;
+}
+
+.service__title {
+  color: var(--color-text-body);
+  font-size: 2.4rem;
+  font-weight: 500;
+  line-height: 1.4;
+  margin-bottom: 3rem;
+  transition: all 500ms ease-in-out;
+}
+
+.service__description {
+  overflow: hidden;
+  margin-bottom: 4rem;
+  font-size: 1.7rem;
+}
+
+.service__more {
+  font-size: 1.7rem;
+  position: relative;
+  display: inline-block;
+  font-weight: 500;
+  padding-left: 5rem;
+  transition: all 500ms ease-in-out;
+}
+
+.service__more:hover {
+  scale: 1.1;
+}
+
+/*Escalonado de las tarjetas de servicios*/
+
+.services__service--bottom {
+  margin-top: 20rem;
+}
+
+.services__service--middle {
+  margin-top: 10rem;
+}
+
+.services__service--top {
+  margin-top: 0rem;
+}
+
+/*Parte de proyectos*/
+
+.layout__projects {
+  background-color: #5eb6ca1e;
+  padding: 5rem 4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.projects__grid {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.projects__header {
+  margin-bottom: 4rem;
+}
+
+.projects__subtitle {
+  font-size: 2rem;
+  font-weight: 500;
+  text-align: left;
+  color: var(--color-cuater);
+  margin-bottom: 1.5rem;
+}
+
+.projects__title {
+  font-size: 6.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--color-text-body);
+}
+
+.projects__categories {
+  display: flex;
+  flex-direction: row;
+  gap: 7rem;
+  margin-bottom: 5.5rem;
+}
+
+.categories__item {
+  position: relative;
+  font-size: 2rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.8rem 0;
+  transition: all 100ms ease-in-out;
+}
+
+.categories__item--active,
+.categories__item:hover {
+  border-bottom: 3px solid var(--color-primary);
+}
+
+.projects__all {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4rem 5rem;
+}
+
+.project__container-img {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 30px 30px 0 0;
+}
+
+.project__img {
+  width: 75rem;
+  transition: all 2000ms ease-in-out;
+}
+
+.project__img:hover {
+  transform: scale(1.1);
+}
+
+.project__content {
+  background-color: var(--color-terciary);
+  padding: 4rem 5rem;
+  border-radius: 0 0 30px 30px;
+}
+
+.project__title {
+  font-size: 3rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: var(--color-text-body);
+  font-weight: 600;
+  transition: all 500ms ease-in-out;
+}
+
+.project__title:hover {
+  color: var(--color-cuater);
+}
+
+.project__tags {
+  font-size: 1.8rem;
+}
+
+/*Parte de estadísticas y mejores clientes*/
+.layout__stats,
+.layout__clients {
+  background-color: var(--color_bg-dark);
+  padding: 14rem 11rem;
+}
+
+.stats__container {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.stats__header {
+  text-align: center;
+}
+
+.stats__subtitle {
+  font-size: 2rem;
+  font-weight: 500;
+  text-align: center;
+  color: var(--color-cuater);
+  margin-bottom: 1.5rem;
+}
+
+.stats__title,
+.clients__title {
+  font-size: 6rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--color-text-body);
+  margin-bottom: 3rem;
+}
+
+.stats__description {
+  font-size: 1.8rem;
+  width: 50%;
+  margin: 0 auto;
+  margin-bottom: 4rem;
+  color: var(--color-description);
+}
+
+.stats__progress {
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+}
+
+.stats__stat {
+  width: 25%;
+  text-align: center;
+  padding: 7rem 6rem;
+  border-radius: 2rem;
+}
+
+.stats__stat:hover {
+  background: linear-gradient(180deg, #c092c7, #19649b);
+}
+
+.stat__icon {
+  margin-bottom: 2rem;
+  font-size: 4rem;
+  color: var(--color-terciary);
+}
+
+.stat__count {
+  display: inline-block;
+  text-align: center;
+  font-size: 6.4rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--color-primary);
+  margin-bottom: 1.5rem;
+}
+
+.stat__title {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--color-terciary);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/*reviews*/
+
+.layout__reviews {
+  position: relative;
+  z-index: 1;
+  padding-left: 2rem;
+  padding-top: 14rem;
+  padding-bottom: 11rem;
+  background-color: #ead8ba4f;
+}
+
+.reviews__grid {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.reviews__header {
+  text-align: left;
+  margin-bottom: 6rem;
+}
+
+.reviews__subtitle {
+  font-size: 2rem;
+  font-weight: 500;
+  text-align: left;
+  color: var(--color-cuater);
+  margin-bottom: 1.5rem;
+}
+
+.reviews__title {
+  font-size: 6rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--color-text-body);
+  margin-bottom: 3rem;
+}
+
+.reviews__description {
+  margin: 3rem 0;
+  width: 50%;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.reviews__container {
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+}
+
+.reviews__review {
+  padding-top: 5rem;
+  padding-bottom: 3rem;
+  margin-right: 4rem;
+  text-align: justify;
+}
+
+.review__company {
+  display: inline-block;
+  margin-bottom: 3rem;
+}
+
+.review__description {
+  font-size: 2.4rem;
+  line-height: 1.2;
+  color: var(--color_bg-dark);
+}
+
+.review__img {
+  width: 8rem;
+  height: 8rem;
+  border-radius: 2rem;
+}
+
+/*Estilos exclusivos mejores clientes*/
+
+.layout__clients {
+  position: relative;
+  padding-bottom: 8rem;
+}
+
+.clients__container {
+  max-width: 90%;
+}
+
+.clients__header {
+  text-align: left;
+}
+
+.clients__subtitle {
+  font-size: 2rem;
+  font-weight: 500;
+  text-align: left;
+  color: var(--color-cuater);
+  margin-bottom: 1.5rem;
+}
+
+.clients__description {
+  font-size: 1.8rem;
+  width: 50%;
+  margin-bottom: 4rem;
+  color: var(--color-description);
+}
+
+.clients__title {
+  color: var(--color-terciary);
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.clients__logos {
+  padding: 10rem 5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.clients__img {
+  width: 15rem;
+  opacity: 0.3;
+  transition: all 1000ms ease-in-out;
+}
+
+.clients__img:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+.client-shapes__item {
+  position: absolute;
+  z-index: 1;
+  top: 10rem;
+  right: 0;
+}
+
+/*Últimas noticias*/
+
+.layout__news {
+  position: relative;
+  z-index: 1;
+  padding: 14rem 0;
+  background-color: #82636d2c;
+}
+
+.news__container {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.news__header {
+  text-align: center;
+  margin-bottom: 6rem;
+}
+
+.news__subtitle {
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--color-cuater);
+  margin-bottom: 3rem;
+}
+
+.news__title {
+  font-size: 6.7rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--color-text-body);
+  margin-bottom: 3rem;
+}
+
+.news__description {
+  font-size: 2.4rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--color-text-body);
+  margin-bottom: 4rem;
+}
+
+.news__list {
+  display: flex;
+  flex-direction: row;
+}
+
+.news__new {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  align-items: center;
+  gap: 2rem;
+  padding: 4rem 2rem 4rem 0;
+  border-top: 1px solid var(--color-borders);
+  border-bottom: 1px solid var(--color-borders);
+  transition: all 300ms ease-in-out;
+}
+
+.news__new:hover {
+  border-top-color: var(--color-primary);
+}
+
+.news__new:last-child {
+  padding-left: 2.5rem;
+}
+
+.new__container-img {
+  overflow: hidden;
+  border-radius: 3rem;
+}
+
+.new__img {
+  width: 35rem;
+  height: 25rem;
+  border-radius: 3rem;
+  transition: all 500ms ease-in-out;
+}
+
+.news__new:hover .new__img {
+  /*es decir que al pasar por encima de news__new, a la imagen se le aumente la escala*/
+  transform: scale(1.1);
+}
+
+.new__content {
+  flex: 1; /*esto lo que hace es igualar el espacio que ocupa cada elemento dentro de la caja. Prueba a quitarlo y compruébalo in situ*/
+  text-align: justify;
+}
+
+.new__title {
+  font-size: 2.4rem;
+  line-height: 1.4;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: var(--color-text-body);
+  transition: all 500ms ease-in-out;
+}
+
+.new__title:hover {
+  color: var(--color-primary);
+}
+
+.new__description {
+  font-size: 1.8rem;
+  color: var(--color-text-body);
+}
+
+.new__more {
+  margin-top: 2rem;
+  font-weight: 600;
+  transition: all 500ms ease-in-out;
+}
+
+.new__more:hover {
+  color: var(--color-primary);
+}
+
+.new__icon {
+  font-size: 1.3rem;
+  vertical-align: middle;
+}
+
+/*estilos de contacto*/
+
+.layout__contact {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  padding: 0;
+  padding-top: 14rem;
+  padding-bottom: 10rem;
+  background-image: url(../img/banner3.jpeg);
+  background-position: center;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.contact__container {
+  max-width: 90%;
+  height: auto;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.contact__header {
+  margin-bottom: 5rem;
+  text-align: center;
+}
+
+.contact__subtitle {
+  color: var(--color-cuater);
+  font-size: 3rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+}
+
+.contact__title {
+  width: 60%;
+  margin: 0 auto;
+  margin-bottom: 5.5rem;
+  font-size: 6.4rem;
+  line-height: 1.2;
+  font-weight: 500;
+  color: var(--color-terciary);
+}
+
+.contact__btn {
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  padding: 2.3rem 5.5rem;
+  background-color: var(--color-cuater);
+  border-radius: 20px;
+  font-weight: 600;
+  text-align: center;
+  transition: all 2000ms ease-in-out;
+  color: #19649b;
+}
+
+.contact__btn:hover {
+  background-color: #19649b;
+  color: var(--color-cuater);
+}
+
+/*footer*/
+
+.layout__footer {
+  padding-top: 7rem;
+  background-color: #27272e;
+}
+
+.footer__container {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.footer__top {
+  padding-bottom: 7rem;
+}
+
+.footer__social {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.social__img {
+  display: inline-block;
+  color: var(--color-text-body);
+  font-size: 3rem;
+  padding: 0.5rem;
+  transition: all 1000ms ease-in-out;
+}
+
+.social__link:hover > .social__img {
+  color: var(--color-terciary);
+}
+
+.footer__main {
+  display: flex;
+  flex-direction: row;
+}
+
+.footer__fleft {
+  flex-basis: 50%;
+}
+
+.fleft__container {
+  border-right: 1px solid var(--color-description);
+  padding-right: 8rem;
+  margin-right: 4rem;
+  margin-bottom: 8rem;
+}
+
+.fletft__title {
+  display: inline-block;
+  font-size: 6.4rem;
+  line-height: 1.2;
+  font-weight: 500;
+  color: var(--color-terciary);
+  margin-bottom: 2rem;
+}
+
+.fleft__subtitle {
+  margin-bottom: 4rem;
+  font-size: 1.7rem;
+  color: var(--color-description);
+}
+
+.fleft__group {
+  background-color: #fff;
+  border-radius: 20px;
+  height: 7.2rem;
+  padding: 1rem;
+  padding-left: 5rem;
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 3rem;
+}
+
+.fleft__mail-icon {
+  display: inline-block;
+  font-size: 2.5rem;
+}
+
+.fleft__form-control {
+  position: relative;
+  display: block;
+  padding: 0.5rem 1.5rem;
+  height: auto;
+  border: none;
+  outline: none;
+  flex: 1;
+  background-color: #fff;
+}
+
+.fleft__btn {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: #19649b;
+  color: var(--color-terciary);
+  border-radius: 1.6rem;
+  padding: 1rem 2.8rem;
+  transition: all 1000ms ease-in-out;
+  margin-right: 3.5rem;
+  width: 15rem;
+  height: 5rem;
+}
+
+.fleft__btn:hover {
+  background-color: var(--color-navbar);
+}
+
+.footer__fright {
+  display: flex;
+  flex-direction: row;
+  flex-basis: 50%;
+}
+
+.footer__widget {
+  margin-bottom: 8rem;
+  flex-basis: 33%;
+}
+
+.widget__title {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-terciary);
+  margin-bottom: 3rem;
+}
+
+.widget__link {
+  font-size: 1.8rem;
+  padding: 0.8rem 0;
+  display: inline-block;
+  transition: all 1000ms linear;
+  color: var(--color-description);
+}
+
+.widget__link:hover {
+  color: var(--color-cuater);
+}
+
+.footer__bottom {
+  border-top: 1px solid var(--color-borders);
+  padding: 2.5rem 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.footer__copyright {
+  flex-basis: 50%;
+}
+
+.copyright__text {
+  display: inline-block;
+  color: var(--color-description);
+}
+
+.footer__links {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.footer__flinks {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: 6rem;
+  color: var(--color-description);
+}
+
+.flinks__item {
+  transition: all 1000ms ease-in-out;
+}
+
+.flinks__item::after {
+  content: "";
+  width: 23px;
+  height: 2px;
+  background-color: var(--color-description);
+  position: absolute;
+  top: 33%;
+  left: 52%;
+}
+
+.flinks__item:hover {
+  color: var(--color-cuater);
+}
+
+.footer__ancla {
+  margin-top: -10px;
+  font-size: 2.5rem;
+  transition: all 1000ms ease-in-out;
+}
+
+.footer__ancla:hover {
+  color: var(--color-cuater);
+}
+
+/*NAVEGACION RESPONSIVE*/
+.navbar__mobile-btn {
+  display: none; /*esto estará oculto, pero en el css de responsive, en el media query que ocultamos el nav bar, lo haré visible*/
+}
+
+.mobile-btn__wrap {
+  height: 5rem;
+  width: 5rem;
+  background-color: var(--color-text-body);
+  border: none;
+  border-radius: 3.2rem;
+  transition: all 1000ms ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.mobile-btn__line {
+  background-color: var(--color-terciary);
+  width: 2rem;
+  height: 0.2rem;
+  margin-bottom: 0.4rem;
+  border-radius: 1rem;
+  transition: all 500ms ease-in-out;
+}
+
+.mobile-btn__line:last-child {
+  width: 1rem;
+  margin-bottom: 0;
+  margin-right: -1rem;
+}
+
+.menu-mobile__container-logo {
+  width: 13rem;
+}
+.menu-mobile__logo {
+  display: inline-block;
+  text-decoration: none;
+  border-radius: 999rem;
+  margin-bottom: 1.5rem;
+}
+
+.menu-mobile {
+  visibility: hidden;
+  opacity: 0;
+
+  position: fixed;
+  left: -300px; /*para que inicialmente esté fuera y cuando le de al botón, aparezca y eso lo ves en la siguiente regla que tengo puesto left 0*/
+  top: 0;
+  z-index: 10; /*para que esté por encima de cualquier cosa*/
+  width: 30rem;
+  height: 100%;
+  background-color: var(--color-terciary);
+  padding: 5rem 1rem;
+  padding-top: 0;
+  overflow-y: auto; /*para que si se sale algo a nivel vertical, haya un scroll*/
+  transition: all 500ms ease-in-out;
+}
+
+.menu-mobile--show {
+  visibility: visible;
+  opacity: 1;
+  left: 0;
+}
+
+.menu-mobile__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2rem 1rem;
+  border-bottom: 1px solid var(--color-borders);
+}
+
+.menu-mobile__close {
+  background-color: transparent;
+  height: 3rem;
+  width: 3rem;
+  border: 2px solid var(--color-description);
+  border-radius: 1rem;
+  color: var(--color-text-body);
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.menu-mobile__list {
+  display: block;
+  height: 100%;
+  overflow: auto;
+}
+
+.menu-mobile__item {
+  position: relative;
+  border-bottom: 1px solid var(--color-borders);
+  margin: 0 1rem;
+}
+
+.menu-mobile__link {
+  position: relative;
+  height: 5rem;
+  line-height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-text-body);
+  font-weight: 600;
+}
+
+.menu-mobile__icon {
+  font-size: 1.4rem;
+}
+
+.menu-mobile__submenu-mobile {
+  display: none;
+  visibility: visible;
+  opacity: 1;
+  min-width: 100%;
+  padding: 0;
+  padding-bottom: 1rem;
+}
+
+.submenu-mobile__link {
+  display: block;
+  padding: 0.7rem 1rem;
+  position: relative;
+  font-size: 1.4rem;
+  color: var(--color-text-body);
+}
+
+/*ESTILOS MODO OSCURO*/
+.switcher {
+  position: fixed;
+  top: 20rem;
+  left: 0;
+  background-color: #D19272;
+  border-radius: 0 3rem 3rem 0;
+  padding: 1rem ;
+  z-index: 5;
+}
+
+.switcher__btn{
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  display: flex;
+}
+
+.switcher__icon-dark, .switcher__icon-light{
+  color: var(--color-primary);
+  font-size: 1.8rem;
+  height: 3rem;
+  width: 3rem;
+  line-height: 3.6rem;
+}
+
+.switcher__icon-dark{
+  display: none;/*por defecto estará oculto*/
+}

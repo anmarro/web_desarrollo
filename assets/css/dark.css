@@ -1,0 +1,38 @@
+/* VARIABLES */
+:root {
+  --mx-width: 1320px;
+  --color-text-body: #525260;
+  --color-primary: #19649b;
+  --color-secondary: #d3e6bf;
+  --color-terciary: #fff;
+  --color-cuater: #ecba97;
+  --color-navbar: #27546c;
+  --color-bg-projects: #ecf2f6;
+  --color_bg-dark: #27272e;
+  --color-description: #99a1aa;
+  --color-borders: #e3e6e9;
+}
+
+body {
+  background-color: #212121;
+}
+
+.services__title,
+.projects__title,
+.projects__categories,
+.stats__title,
+.reviews__title,
+.news__title,
+.news__description,
+.new__link,
+.new__description,
+.new__more,
+.project__link-title,
+.project__tag {
+  color: #fff;
+}
+
+.menu__navbar--fixed,
+.project__content {
+  background-color: #212121;
+}
